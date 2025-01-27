@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PicoWDucky</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #2e2e2e;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+        }
+        .title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffa500;
+        }
+        .textarea {
+            width: 100%;
+            height: 200px;
+            resize: none;
+            background-color: #1e1e1e;
+            color: white;
+            border: 2px solid #ffa500;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: "Courier New", Courier, monospace;
+        }
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .run { background-color: #28a745; color: white; }
+        .upload { background-color: #ffc107; color: black; }
+        .save { background-color: #dc3545; color: white; }
+        .clear { background-color: #17a2b8; color: white; }
+        .store { background-color: #6c757d; color: white; }
+        .schedule { background-color: #007bff; color: white; }
+        button:hover {
+            opacity: 0.9;
+        }
+        .status-bar {
+            background-color: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+            width: 100%;
+            height: 25px;
+        }
+        .progress {
+            background-color: #ffa500;
+            height: 100%;
+            width: 0%;
+            transition: width 0.2s;
+        }
+        .status-text {
+            margin-top: 5px;
+            text-align: center;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">PicoWDucky</div>
+        <textarea id="content" class="textarea" placeholder="Enter your payload script..."></textarea>
+        <div class="buttons">
+            <button class="run" onclick="runPayload()">Run</button>
+            <button class="schedule" onclick="schedulePayload()">Schedule</button>
+            <button class="store" onclick="storePayload()">Store on Pico</button>
+            <button class="upload" onclick="triggerFileInput()">Upload</button>
+            <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(event)">
+            <button class="save" onclick="saveFile()">Save</button>
+            <button class="clear" onclick="clearTextArea()">Clear</button>
+        </div>
+        <div class="status-bar">
+            <div id="progress" class="progress"></div>
+        </div>
+        <div id="statusText" class="status-text">Status: Idle</div>
+    </div>
+
+    <script>
+        function sendHttpRequest(data) {
+            console.log("Sending payload:", data);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://192.168.4.1/execute", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        updateStatus("Execution complete.", 100);
+                    } else {
+                        updateStatus("Execution failed. Status: " + xhr.status, 0);
+                    }
+                }
+            };
+            xhr.send(JSON.stringify(data));
+        }
+
+        function updateProgress(percent) {
+            document.getElementById("progress").style.width = percent + "%";
+        }
+
+        function updateStatus(message, progress) {
+            document.getElementById("statusText").textContent = "Status: " + message;
+            updateProgress(progress);
+        }
+
+        function runPayload() {
+            const content = document.getElementById("content").value;
+            if (!content.trim()) {
+                updateStatus("No payload to execute.", 0);
+                return;
+            }
+
+            updateStatus("Running payload...", 0);
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                updateProgress(progress);
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    sendHttpRequest({ username: "Payload", content: content });
+                }
+            }, 300);
+        }
+
+        function schedulePayload() {
+            const delay = prompt("Enter delay in seconds before execution:");
+            if (isNaN(delay) || delay <= 0) {
+                alert("Invalid delay.");
+                return;
+            }
+
+            updateStatus(`Scheduled to run in ${delay} seconds...`, 0);
+
+            setTimeout(runPayload, delay * 1000);
+        }
+
+        function storePayload() {
+            const content = document.getElementById("content").value;
+            if (!content.trim()) {
+                updateStatus("No payload to store.", 0);
+                return;
+            }
+
+            updateStatus("Storing payload on Pico...", 50);
+            sendHttpRequest({ action: "store", content: content });
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById("content").value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+
+        function saveFile() {
+            const content = document.getElementById("content").value;
+            const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "payload.txt";
+            link.click();
+        }
+
+        function clearTextArea() {
+            document.getElementById("content").value = "";
+            updateStatus("Cleared text area.", 0);
+        }
+
+        function triggerFileInput() {
+            document.getElementById("fileInput").click();
+        }
+    </script>
+</body>
+</html>
