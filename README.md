@@ -41,24 +41,25 @@ USB Rubber Ducky where you can run payloads from iternet
   - `index.html`
 
 # Mnemonic Table
-| Mnemonics | Description | Example  |
-|-----------|-------------|----------|
-| DELAY      | It add time in the code.<br>Time is in milliseconds.<br>1000 ms = 1 second. | WAIT 1000 |
-| STRING      | It add text want to type in the code. | TYPE Hello World! |
-| LOOP      | It runs commands for a certain number of times.<br> Synatx is `LOOP number-of-times commands` | LOOP 3<br>TYPE Hello World!<br>EXIT<br><br>LOOP 4<br>TAB<br>EXIT<br><br>LOOP 1<br>CTRL S<br>EXIT<br><br>LOOP 1<br>CTRL SHIFT N<br>EXIT<br> |
-| INF       | It run commans infinitely.<br>Syntax is `INF commands` | INF<br>TYPE Hello World!<br>EXIT<br><br>INF<br>TAB<br>EXIT<br> |
-| REM       | (#)
-| STRING_DELAY| 
-| HOLD       |
-| RELASE     |
-| END_LOOP   |
-| DEFINE     |
-| VAR        |
-| REPEAT     |
-| IF         |
-| ELSE       |
-| END_IF     |
-| CALL       |
+| Mnemonics      | Description                                                                                  | Example                                                                                  |
+|----------------|----------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| DELAY          | It add time in the code.<br>Time is in milliseconds.<br>1000 ms = 1 second.                  | WAIT 1000                                                                                 |
+| STRING         | It add text want to type in the code.                                                        | TYPE Hello World!                                                                          |
+| LOOP           | It runs commands for a certain number of times.<br>Syntax is `LOOP number-of-times commands`  | LOOP 3<br>TYPE Hello World!<br>EXIT<br><br>LOOP 4<br>TAB<br>EXIT<br><br>LOOP 1<br>CTRL S<br>EXIT<br><br>LOOP 1<br>CTRL SHIFT N<br>EXIT<br> |
+| INF            | It run commans infinitely.<br>Syntax is `INF commands`                                         | INF<br>TYPE Hello World!<br>EXIT<br><br>INF<br>TAB<br>EXIT<br>                            |
+| REM            | (#)                                                                                          | REM This is a comment                                                                    |
+| STRING_DELAY   | It types text with a delay between each character. You can specify the delay in milliseconds. | STRING_DELAY Hello World! 100 (Types "Hello World!" with 100 ms delay between each character) |
+| HOLD           | It simulates holding down a key. You can specify a key to hold down.                          | HOLD SHIFT                                                                                 |
+| RELEASE        | It simulates releasing a key that was previously held down.                                   | RELEASE SHIFT                                                                             |
+| END_LOOP       | It ends a loop. Can be used with `LOOP` or `INF` commands to stop repetitive actions.         | END_LOOP                                                                                 |
+| DEFINE         | It defines a variable or constant to be used later in the script.                             | DEFINE VAR1 Hello (Defines a variable VAR1 with value "Hello")                           |
+| VAR            | It inserts the value of a variable into the script.                                           | TYPE VAR1 (Types the value of VAR1, in this case "Hello")                                |
+| REPEAT         | It repeats the last action a specific number of times.                                         | REPEAT 5 TYPE Hello (Types "Hello" 5 times)                                               |
+| IF             | It allows conditional execution. You specify a condition to check before running the next commands. | IF VAR1 == Hello TYPE Condition Met (Checks if VAR1 equals "Hello", then types "Condition Met") |
+| ELSE           | It specifies an alternate set of actions if the `IF` condition is not met.                   | ELSE TYPE Condition Not Met (If the `IF` condition fails, it types "Condition Not Met") |
+| END_IF         | It ends the block of conditional execution started by `IF`.                                    | END_IF                                                                                   |
+| CALL           | It calls a function or another script in the Rubber Ducky script.                            | CALL myFunction (Calls the function or script named "myFunction")                        |
+
 
 # Supported Mnemonics
 ## Alphabet Keys
