@@ -87,7 +87,7 @@ USB Rubber Ducky where you can run payloads from iternet
 3. Copy all files in the `CIRCUITPY`.
    - It ask for replacement of `code.py` file, then replace it.
    - It will overwrite in the `code.py` file.
-   - After 2-3 minutes, an Access Point is created named `PicoWQuack` whose password is `picowquack`.
+   - After 2-3 minutes, an Access Point is created named `PicoWDuck` whose password is `picowquack`.
 6. Connect to that access point.
 7. When connected successfully, open your browser and type the following IP - `192.168.4.1`.
 8. Hit enter.
