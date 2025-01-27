@@ -6,9 +6,9 @@ import wifi
 import time
 import usb_hid
 import socketpool
-from keycode_win_cz import Keycode
+from adafruit_hid.keycode import Keycode
 from adafruit_hid.keyboard import Keyboard
-from keyboard_layout_win_cz import KeyboardLayout
+from adafruit_hid.keyboard_layout_us import KeyboardLayout
 from adafruit_httpserver import Server, Request, JSONResponse, POST, Response
 
 ssid = "PicoWDucky"
