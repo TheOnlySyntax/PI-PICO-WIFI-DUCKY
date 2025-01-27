@@ -3,9 +3,6 @@ Setup for Raspberry Pi Pico W to make a Wifi Duck.
 
 # This project is only working for Raspberry Pi Pico W!
 
-# Working of PicoWDucky
-![PicoWDucky Working](https://github.com/user-attachments/assets/80df1d28-bf29-4f62-9eb3-b008decb98ff)
-
 # What is Wifi Ducky?
 USB Rubber Ducky where you can run payloads from iternet
 
