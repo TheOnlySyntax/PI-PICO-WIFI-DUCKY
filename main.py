@@ -1,6 +1,5 @@
 # PicoW Ducky Enhanced with Hak5 USB Rubber Ducky Commands
 # Setup for Raspberry Pi Pico W to make a Wifi Ducky.
-# Author - WireBits (Enhanced by ChatGPT)
 
 import wifi
 import time
